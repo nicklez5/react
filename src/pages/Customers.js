@@ -16,18 +16,18 @@ export default function Customers(){
         
         <h1>Here are our clothes:</h1>
         {MenShirts 
-        ? MenShirts.map((MenShirts) => {
+        ? MenShirts.map((MenShirt) => {
             return (
                 <p>
-                <strong>id: </strong>{MenShirts.id}
+                <strong>id: </strong>{MenShirt.id}
                 <br/>
-                <strong>size: </strong>{MenShirts.size}
+                <strong>size: </strong>{MenShirt.size}
                 <br/>
-                <strong>price: </strong> {MenShirts.price}
+                <strong>price: </strong> {MenShirt.price}
                 <br/>
-                <strong>color: </strong>{MenShirts.color}
+                <strong>color: </strong>{MenShirt.color}
                 <br/>
-                <strong>image: </strong><img src="{img}" width="100" height="100" className="d-inline-block align-top"></img>
+                <strong>image: </strong> <img src={MenShirt.img_url} height="100" width="200"></img>
                 </p>
                 )
         }): null}
