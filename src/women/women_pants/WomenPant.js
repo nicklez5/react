@@ -1,30 +1,34 @@
-import { useParams, Link, useNavigate } from "react-router-dom"
-import { useEffect, useState} from "react";
-import NotFound from "../components/NotFound";
-import { baseUrl } from "../shared";
-export default function MenShirt(){
+import { useParams, Link, useNavigate,useLocation } from "react-router-dom"
+import { useEffect, useState, useContext} from "react";
+import NotFound from "../../components/NotFound";
+import { baseUrl } from "../../shared";
+import { LoginContext } from "../../App";
+export default function WomenPant(){
+    const [loggedIn, setLoggedIn] = useContext(LoginContext)
     const { id } = useParams("");
-    const [MenShirt,setMenShirt] = useState()
+    const [WomenPant,setWomenPant] = useState()
     const [notFound,setNotFound] = useState()
-    const[tempMenShirt,setTempMenShirt] = useState();
+    const [tempWomenPant,setTempWomenPant] = useState();
     const [changed, setChanged ] = useState(false);
     const [error, setError] = useState();
     const navigate = useNavigate();
+    const location = useLocation()
     useEffect(()=>{
-        if(!MenShirt) return;
-        if(!tempMenShirt) return;
+        if(!WomenPant) return;
+        if(!tempWomenPant) return;
         
         let equal = true
-        if(MenShirt.name !== tempMenShirt.name) equal = false;
-        if(MenShirt.size !== tempMenShirt.size) equal = false
-        if(MenShirt.img_url !== tempMenShirt.img_url) equal = false
-        if(MenShirt.price !== tempMenShirt.price) equal = false
+        if(WomenPant.name !== tempWomenPant.name) equal = false;
+        if(WomenPant.waist_size !== tempWomenPant.waist_size) equal = false
+        if(WomenPant.img_url !== tempWomenPant.img_url) equal = false
+        if(WomenPant.price !== tempWomenPant.price) equal = false
+        if(WomenPant.quantity !== tempWomenPant.quantity) equal = false
         if(equal)setChanged(false);
 
     })
     useEffect(() => {
         
-        const url = baseUrl + 'api/clothes/men_shirts/' + id + '/' 
+        const url = baseUrl + 'api/women_pants/' + id + '/' 
         fetch(url, {
             headers: {
                 'Content-Type': 'application/json',
@@ -35,7 +39,12 @@ export default function MenShirt(){
             if(response.status === 404){
                 setNotFound(true);
             }else if (response.status === 401){
-                navigate('/login')
+                setLoggedIn(false)
+                navigate('/login',{
+                    state: {
+                        previousUrl: location.pathname,
+                    }
+                })
             }
 
             if(!response.ok)
@@ -44,8 +53,8 @@ export default function MenShirt(){
         })
         .then((data) => {
               
-            setMenShirt(data.MenShirt)
-            setTempMenShirt(data.MenShirt)
+            setWomenPant(data.WomenPant)
+            setTempWomenPant(data.WomenPant)
             setError(undefined)
         }).catch((e) => {
             setError(e.message)
@@ -55,27 +64,34 @@ export default function MenShirt(){
         
     }
     
-    function updateMenShirt(e){
+    function updateWomenPant(e){
         e.preventDefault();
-        const url = baseUrl + 'api/clothes/men_shirts/' + id + '/';
+        const url = baseUrl + 'api/women_pants/' + id + '/';
         fetch(url,{
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type' : 'application/json; charset=UTF-8',
-                Authorization: 'Bearer ' + localStorage.getItem('refresh'),
+                Authorization: 'Bearer ' + localStorage.getItem('access'),
 
             },
-            body: JSON.stringify(tempMenShirt)
+            body: JSON.stringify(tempWomenPant)
         }).then((response) => {
-            
+            if (response.status === 401){
+                setLoggedIn(false)
+                navigate('/login',{
+                    state: {
+                        previousUrl: location.pathname,
+                    }
+                })
+            }
             if(!response.ok){
                 throw new Error('something went wrong')
             }
-                return response.json()
+            return response.json()
         }).then((data) =>
         {
-            setMenShirt(data.MenShirt)
+            setWomenPant(data.WomenPant)
             setChanged(false)
             
             setError(undefined)
@@ -87,16 +103,16 @@ export default function MenShirt(){
     return (
         <div>
         {notFound ? <p>The customer with id {id} was not found</p> : null}
-        {MenShirt ? (
+        {WomenPant ? (
             <div className='p-3'>
-            <form id="MenShirts" className="w-full max-w-sm" onSubmit={updateMenShirt}>
+            <form id="WomenPant" className="w-full max-w-sm" onSubmit={updateWomenPant}>
                 <div className="md:flex md:items-center mb-6">
                     <div className="md:w-1/3">
                         <label for="name" className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" >Image:</label>
                     </div>
                 </div>
             <div className="md:w-2/3">
-                <img src={MenShirt.img_url} height="100" width="200" className="md:flex md:items-center mb-6"></img>
+                <img src={WomenPant.img_url} height="100" width="200" className="md:flex md:items-center mb-6"></img>
                 <br></br>
             </div>
             <div className="md:flex md:items-center mb-6">
@@ -108,10 +124,10 @@ export default function MenShirt(){
                 id = "name"
                 className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" 
                 type="text" 
-                value={tempMenShirt.name}
+                value={tempWomenPant.name}
                 onChange={(e) => {
                     setChanged(true)
-                    setTempMenShirt({...tempMenShirt,
+                    setTempWomenPant({...tempWomenPant,
                         name: e.target.value,
                     })
                     
@@ -120,18 +136,18 @@ export default function MenShirt(){
             </div>
             <div className="md:flex md:items-center mb-6">
                 <div className="md:w-1/3">
-                    <label for="size" className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"> Size:</label>
+                    <label for="size" className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">Waist Size:</label>
                 </div>
             <div className="md:w-2/3">
                 <input
                 id="size"
                 className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" 
                 type="text" 
-                value={tempMenShirt.size} 
+                value={tempWomenPant.waist_size} 
                 onChange={(e) => {
                     setChanged(true)
-                    setTempMenShirt({...tempMenShirt,
-                        size: e.target.value,
+                    setTempWomenPant({...tempWomenPant,
+                        waist_size: e.target.value,
                     })
                     
                 }}/>
@@ -146,11 +162,11 @@ export default function MenShirt(){
                     id="price"
                     className = "bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
                     type="number"
-                    value={tempMenShirt.price}
+                    value={tempWomenPant.price}
                     onChange={(e) => {
                     setChanged(true)
                     
-                    setTempMenShirt({...tempMenShirt,
+                    setTempWomenPant({...tempWomenPant,
                         price: e.target.value,
                     })
                     
@@ -166,15 +182,34 @@ export default function MenShirt(){
             id="img_url"
             className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
             type="text" 
-            value={tempMenShirt.img_url} 
+            value={tempWomenPant.img_url} 
             onChange={(e) => {
                 setChanged(true)
-                setTempMenShirt({...tempMenShirt,
+                setTempWomenPant({...tempWomenPant,
                     img_url: e.target.value,
                 })
                 
             }}/>
             </div>
+            </div>
+            <div className="md:flex md:items-center mb-6">
+                <div className="md:w-1/3">
+                    <label for="quantity" className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" >Quantity:</label>
+                </div>
+                <div className="md:w-2/3">
+                    <input 
+                        id = "quantity"
+                        className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" 
+                        type="number" 
+                        value={tempWomenPant.quantity}
+                        onChange={(e) => {
+                            setChanged(true)
+                            setTempWomenPant({...tempWomenPant,
+                                quantity: e.target.value,
+                            })
+                            
+                    }}  />
+                </div>
             </div>
             
             </form>
@@ -182,11 +217,11 @@ export default function MenShirt(){
             ( 
             <div className="mb-2">
             <button className="bg-slate-400 hover:bg-slate-500 text-white font-bold py-2 px-4 mr-2 rounded" onClick={(e) => {
-                setTempMenShirt({...MenShirt})
+                setTempWomenPant({...WomenPant})
                 setChanged(false)
             }}>Cancel</button> 
             <button 
-                form="MenShirts" 
+                form="WomenPant" 
                 className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
                 Save
             </button>
@@ -195,12 +230,20 @@ export default function MenShirt(){
         <button 
             className = "bg-slate-400 hover:bg-slate-500 text-white font-bold py-2 px-4 rounded"
             onClick={(e) => {
-            const url = baseUrl + 'api/clothes/men_shirts/' + id + "/"
+            const url = baseUrl + 'api/women_pants/' + id + "/"
             fetch(url, {method: 'DELETE', headers: {
                 'Content-Type': 'application/json',
-                
+                Authorization: 'Bearer ' + localStorage.getItem('access'),
             }})
             .then((response) => {
+                if(response.status === 401){
+                    setLoggedIn(false)
+                    navigate('/login',{
+                        state: {
+                            previousUrl: location.pathname,
+                        }
+                    })
+                }
                 if(!response.ok){
                     throw new Error('Something went wrong');
                 }
@@ -217,7 +260,7 @@ export default function MenShirt(){
         ) : null}
         {error ? <p>{error}</p> : null}
         <br></br>
-        <Link to="/MenShirts"><button className="no-underline bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">← Go back</button></Link>
+        <Link to="/WomenPants"><button className="no-underline bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">← Go back</button></Link>
         
         </div>
         

@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-function AddMenShirt(props) {
-  const [name, setMenShirtName] = useState('');
+function AddWomenJacket(props) {
+  const [name, setWomenJacketName] = useState('');
   const [size,setSize] = useState('');
   const [img, setImg] = useState('');
   const [color, setColour] = useState('');
   const [price, setPrice] = useState('');
+  const [quantity, setQuantity] = useState('');
   const [show,setShow] = useState(props.show)
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -15,8 +16,8 @@ function AddMenShirt(props) {
   return (
     <>
     <button onClick={props.toggleShow} 
-    className="block m-2 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
-      + Add MenShirt
+    className="block m-2 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-11 rounded">
+      + Add WomenJacket
     </button>
       
 
@@ -27,17 +28,18 @@ function AddMenShirt(props) {
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Add MenShirt</Modal.Title>
+          <Modal.Title>Add WomenJacket</Modal.Title>
         </Modal.Header>
         <Modal.Body>
         <form onSubmit={(e) => {
             e.preventDefault()
-            setMenShirtName('')
+            setWomenJacketName('')
             setSize('')
             setImg('')
             setColour('')
             setPrice('')
-            props.newMenShirt(name,size,img,color,price)
+            setQuantity('')
+            props.newWomenJacket(name,size,img,color,price,quantity)
         }} 
         id="editmodal" className="w-full max-w-sm m-3">
             <div className="md:flex md:items-center mb-6">
@@ -50,9 +52,9 @@ function AddMenShirt(props) {
                 <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" 
                 id="name" 
                 type="text"
-                placeholder="T-shirt"
+                placeholder="Jacket Name"
                 value={name}
-                onChange={(e) => {setMenShirtName(e.target.value)}}
+                onChange={(e) => {setWomenJacketName(e.target.value)}}
                 />
                 </div>
             </div>
@@ -120,6 +122,22 @@ function AddMenShirt(props) {
                 />
                 </div>
             </div>
+            <div className="md:flex md:items-center mb-6">
+                <div className="md:w-1/4">
+                <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="quantity">
+                    Quantity
+                </label>
+                </div>
+                <div className="md:w-3/4">
+                <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" 
+                id="quantity" 
+                type="number"
+                placeholder="0" 
+                value={quantity}
+                onChange={(e) => {setQuantity(e.target.value)}}
+                />
+                </div>
+            </div>
             
             </form>
         </Modal.Body>
@@ -131,12 +149,11 @@ function AddMenShirt(props) {
           <button 
           className = "bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" 
           form="editmodal" >
-            Add Clothes</button>
-        
+            Add</button>
         </Modal.Footer>
       </Modal>
     </>
   );
 }
 
-export default AddMenShirt;
+export default AddWomenJacket;
