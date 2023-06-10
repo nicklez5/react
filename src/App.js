@@ -90,7 +90,7 @@ function App() {
             <Route path='/earrings' element={<Earrings/>}></Route>
             <Route path='/womenshirts/:id' element={<WomenShirt />}></Route>
             <Route path='/womenshirts' element={<WomenShirts/>}></Route>
-            <Route path='/womenpants/:id' elemennt={<WomenPant/>}></Route>
+            <Route path='/womenpants/:id' element={<WomenPant/>}></Route>
             <Route path='/womenpants'element={<WomenPants/>}></Route>
             <Route path='/womenjoggers/:id'element={<WomenJogger/>}></Route>
             <Route path='/womenjoggers'element={<WomenJoggers/>}></Route>
