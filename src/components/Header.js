@@ -6,7 +6,8 @@ import { LoginContext } from '../App'
 const navigation = [
   { name: 'Men', href: '/men'},
   { name: 'Women', href: '/women'},
-  { name: 'Accessories', href: '/accessories'}
+  { name: 'Accessories', href: '/accessories'},
+  { name: 'Cart', href: '/cart'}
 ]
 
 function classNames(...classes) {

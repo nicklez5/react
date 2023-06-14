@@ -15,7 +15,7 @@ export default function Register(){
         localStorage.clear()
         setLoggedIn(false)
     })
-    function login(e){
+    function register(e){
         e.preventDefault()
         const url = baseUrl + 'api/register/'
         fetch(url,{
@@ -45,7 +45,7 @@ export default function Register(){
         <form
         className="m-2 w-full max-w-sm"
         id="MenShirts"
-        onSubmit={login}>
+        onSubmit={register}>
         <div className="md:flex md:items-center mb-6">
             <div className="md:1/4 px-4">
                 <label for="name">Name:</label>

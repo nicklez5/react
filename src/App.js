@@ -38,6 +38,7 @@ import Glasses from './accessories/glasses/Glasses';
 import Glass from './accessories/glasses/Glass';
 import Necklaces from './accessories/necklaces/Necklaces';
 import Necklace from './accessories/necklaces/Necklace';
+import Cart from './pages/Cart';
 export const LoginContext = createContext();
 
 function App() {
@@ -107,6 +108,7 @@ function App() {
             <Route path='/accessories' element={<Accessories/>}></Route>
             <Route path='/women'element={<Women/>}></Route>
             <Route path='/men'element={<Men/>}></Route>
+            <Route path='/cart' element={<Cart/>}></Route>
             <Route path='/register' element={<Register/>}></Route>
             <Route path='/login' element={<Login/>}></Route>
             <Route path='/404' element={<NotFound />}></Route>

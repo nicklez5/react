@@ -9,7 +9,7 @@ export default function Login(){
     const [password,setPassword] = useState()
     const navigate = useNavigate();
     const location = useLocation();
-    function grab_id(e,email,password){
+    function grab_id(e){
         e.preventDefault()
         const url = baseUrl + 'api/login/'
         fetch(url,{
@@ -29,7 +29,7 @@ export default function Login(){
         })
         .then((data) => {
             localStorage.setItem('id',data.user_id)
-
+            console.log("id: " + localStorage.id)
         })
     }
     function login(e){
@@ -52,7 +52,7 @@ export default function Login(){
         .then((data)=>{
             localStorage.setItem('access',data.access)
             localStorage.setItem('refresh',data.refresh)
-            grab_id(e,email,password)
+            grab_id(e)
             //localStorage.setItem('refresh',data.refresh)
             setLoggedIn(true)
             navigate(location?.state?.previousUrl ? location.state.previousUrl : '/menshirts')

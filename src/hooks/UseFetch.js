@@ -9,7 +9,7 @@ export default function useFetch(url, { method,headers,body } = {}){
         fetch(url,{
             method: method,
             headers: headers,
-            body: body,
+            body: JSON.stringify(body),
         })
             .then((response)=>{
                 if(response.status === 401){
