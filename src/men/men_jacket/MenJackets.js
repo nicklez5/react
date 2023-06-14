@@ -8,6 +8,7 @@ export default function MenJackets(){
     const [loggedIn, setLoggedIn] = useContext(LoginContext)
     //const [menshirts, setMenShirts] = useState()
     const [show,setShow] = useState(false)
+    const [error,setError] = useState()
     function toggleShow(){
         setShow(!show)
     }
@@ -68,7 +69,32 @@ export default function MenJackets(){
                      <div key={MenJacket.img_url}>
                         <img src={MenJacket.img_url} height="100" width="200"></img>
                      </div>
-                     <button className="no-underline bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">Add to Cart</button>
+                     <button className="no-underline bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
+                        onClick={(e) => {
+                            const url = baseUrl + 'api/carts/' + localStorage.getItem('id') + "/_menjacket/" + MenJacket.id + "/"
+                            fetch(url, {method: 'POST' ,headers:{
+                                'Content-Type': 'application/json',
+                                Authorization: 'Bearer ' + localStorage.getItem('access')
+                            }})
+                            .then((response) => {
+                                if(response.status === 401){
+                                    setLoggedIn(false)
+                                    navigate('/login', {
+                                        state: {
+                                            previousUrl: location.pathname
+                                        }
+                                    })
+                                }
+                                if(!response.ok){
+                                    throw new Error('Something went wrong')
+                                }
+                                window.location.reload()
+                                return response.json();
+                            }).catch((e) => {
+                                setError(e.message)
+                            })
+                        }}
+                     >Add to Cart</button>
                      </ul>
                     
                     )
